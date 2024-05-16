@@ -8,6 +8,7 @@ import GifPage from './pages/single-gif'
 import Favorites from './pages/favourites'
 import GifProvider from './context/gif-context'
 
+
 //homepage
 //categories
 //search
@@ -38,7 +39,8 @@ const router = createBrowserRouter([
       {
         path:'/favourites',
         element:<Favorites/>
-      }
+      },
+
     ]
   }
 ])

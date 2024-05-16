@@ -6,6 +6,8 @@ import FollowOn from '../components/follow-on';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 
 import Gif from '../components/gif';
+import { FaPaperPlane } from 'react-icons/fa6';
+import { IoCodeSharp } from 'react-icons/io5';
 
 const contentType =["gifs","Stickers","texts"];
 
@@ -16,6 +18,42 @@ const GifPage = () => {
   const [readMore, setReadMore] = useState(false);
 
   const {gf,addToFavorites,favourites} = GifState();
+
+  
+  const Link = window.location.origin +  window.location.pathname;
+  const [embedCode, setEmbedCode] = useState('');
+
+  const EmbedGif = () => {
+    // Generate the embed code based on the link
+    const code = `<iframe src={Link} width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
+    setEmbedCode(code);
+  };
+
+   
+    const shareGif = async () => {
+      try {
+        if (navigator.share) {
+          await navigator.share({
+            title: 'Title of the shared item',
+            text: 'Description of the shared item',
+            url:window.location.origin + window.location.pathname,
+          });
+        } else {
+          // Fallback for browsers that don't support Web Share API
+          const shareUrl = window.location.origin; // Your shareable URL
+          const shareTitle = 'Title of the shared item'; // Your shareable title
+          const shareText = 'Description of the shared item'; // Your shareable text
+  
+          // Fallback to mailto: for email sharing
+          window.location.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
+          
+          // You can also use sms: protocol for sharing via SMS
+          // window.location.href = sms:?body=${encodeURIComponent(shareText + '\n' + shareUrl)};
+        }
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    };
 
   const fetchGif = async ()=>{
     const gifId = slug.split("-");
@@ -34,6 +72,8 @@ const GifPage = () => {
     }
     fetchGif();
   },[])
+
+  
 
   return (
     <div className="grid grid-cols-4 my-10 gap-4">
@@ -113,9 +153,9 @@ const GifPage = () => {
                 <div className="faded-text">@{gif?.user?.username}</div>
               </div>
 
-              {/* <button className="ml-auto" onClick={shareGif}>
+              <button className="ml-auto" onClick={shareGif}>
                 <FaPaperPlane size={25} />
-              </button> */}
+              </button>
             </div>
             {/* -- Mobile UI -- */}
           </div>
@@ -133,7 +173,7 @@ const GifPage = () => {
               />
               Favorite
             </button>
-            {/* <button
+            <button
               onClick={shareGif} // Assignment
               className="flex gap-6 items-center font-bold text-lg"
             >
@@ -146,8 +186,17 @@ const GifPage = () => {
             >
               <IoCodeSharp size={30} />
               Embed
-            </button> */}
-          </div>
+            </button>
+            </div>
+            <div>
+
+            {embedCode && (
+              <div>
+          <h3>Embed Code:</h3>
+          <textarea className='text-black' rows="4" cols="50" value={embedCode} readOnly onChange={() => {}}  />
+        </div>
+      )} 
+      </div>
         </div>
 
         <div>
