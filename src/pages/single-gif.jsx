@@ -19,14 +19,18 @@ const GifPage = () => {
 
   const {gf,addToFavorites,favourites} = GifState();
 
+  const [showEmbedCode, setShowEmbedCode] = useState(false);
+
   
   const Link = window.location.origin +  window.location.pathname;
   const [embedCode, setEmbedCode] = useState('');
 
   const EmbedGif = () => {
     // Generate the embed code based on the link
-    const code = `<iframe src={Link} width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
+    const code = `<iframe src="${window.location.href}" width="600" height="400" frameborder="0" allowfullscreen></iframe>`;
     setEmbedCode(code);
+    setShowEmbedCode((prevShowEmbedCode) => !prevShowEmbedCode);
+
   };
 
    
@@ -190,10 +194,10 @@ const GifPage = () => {
             </div>
             <div>
 
-            {embedCode && (
-              <div>
+            {showEmbedCode && (
+              <div className="mt-4 p-4 rounded-lg shadow-md">
           <h3>Embed Code:</h3>
-          <textarea className='text-black' rows="4" cols="50" value={embedCode} readOnly onChange={() => {}}  />
+          <textarea className='text-white bg-black w-full p-2 border border-gray-300 rounded-lg' rows="4" cols="50" value={embedCode} readOnly onChange={() => {}}  />
         </div>
       )} 
       </div>
